@@ -1,0 +1,33 @@
+# What is the name of the workflow?
+name: Integration
+
+# When we want to trigger this workflow?
+on:
+  pull_request:
+    branches:
+      - main
+
+# What jobs we want to run?
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # A ready solutions that can be found on the webpage of GitHub Actions
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v2
+      - name: Install dependencies
+        run:  npm install
+      - name: Build app
+        run: npm run build
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      # A ready solutions that can be found on the webpage of GitHub Actions
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v2
+      - name: Install dependencies
+        run:  npm install
+      - name: Run unit tests
+        run: npm run test
+      
+      
