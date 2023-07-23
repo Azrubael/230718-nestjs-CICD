@@ -47,8 +47,9 @@ jobs:
           --query taskDefinition > task-definition.json
 
       - name: Update task-definition.json
-        run: |
-        echo "`jq '.containerDefinitions[0].image="${{ steps.build-image.outputs.image }}"' task-definition.json`" > task-definition.json
-        cat task-definition.json
+        run: echo "`jq '.containerDefinitions[0].image="${{ steps.build-image.outputs.image }}"' task-definition.json`" > task-definition.json
+        
+      - name: Printout updated task
+        run: cat task-definition.json
 
 
