@@ -43,7 +43,7 @@ jobs:
 
       - name: Download task definiton
         run: |
-          aws ecs describe-task-definition --task-definition helloworldtask \
+          aws ecs describe-task-definition --task-definition az-helloworldtask \
           --query taskDefinition > task-definition.json
 
       - name: Update task-definition.json
