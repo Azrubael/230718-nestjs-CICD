@@ -31,15 +31,15 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@62f4f872db3836360b72999f4b87f1ff13310f3a
 
-      # - name: Build, tag and push image to Amazon ECR
-      #   id: build-image
-      #   env:
-      #     IMAGE_TAG: ${{ github.sha }}
-      #   run: |
-      #     aws ecr-public get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR }}
-      #     docker build -t ${{ secrets.AWS_ECR }}/$ECR_REPOSITORY:$IMAGE_TAG .
-      #     docker push ${{ secrets.AWS_ECR }}/$ECR_REPOSITORY:$IMAGE_TAG
-      #     echo "::set-output name=image::${{ secrets.AWS_ECR }}/$ECR_REPOSITORY:$IMAGE_TAG"
+      - name: Build, tag and push image to Amazon ECR
+        id: build-image
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          aws ecr-public get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR }}
+          docker build -t ${{ secrets.AWS_ECR }}/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push ${{ secrets.AWS_ECR }}/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image::${{ secrets.AWS_ECR }}/$ECR_REPOSITORY:$IMAGE_TAG"
 
       - name: Download task definiton
         run: |
@@ -47,5 +47,8 @@ jobs:
           --query taskDefinition > task-definition.json
 
       - name: Update task-definition.json
-        # run: echo "`jq '.containerDefinitions[0].image="${{ steps.build-image.outputs.image }}"' task-definition.json`" > task-definition.json
-        run: cat task-definition.json
+        run: |
+        echo "`jq '.containerDefinitions[0].image="${{ steps.build-image.outputs.image }}"' task-definition.json`" > task-definition.json
+        cat task-definition.json
+
+
